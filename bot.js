@@ -4,6 +4,7 @@ const fetch = require("node-fetch");
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  console.log(process.env.DISCORD_KEY);
 });
 
 client.on("message", (message) => {
