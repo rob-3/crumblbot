@@ -4,7 +4,7 @@
   "description": "",
   "main": "bot.js",
   "author": "",
-  "license": "BSD-2-Clause-Patent",
+  "license": "0BSD",
   "dependencies": {
     "discord.js": "^12.5.3",
     "node-fetch": "^2.6.1"
