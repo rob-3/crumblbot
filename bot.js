@@ -27,7 +27,7 @@ client.on("message", async (message) => {
           const embed = new Discord.MessageEmbed()
             .setTitle(cookie.name)
             .setDescription(cookie.description)
-            .setThumbnail(cookie.newImage || cookie.image);
+            .setThumbnail(cookie.image);
           message.channel.send(embed);
         });
     }
