@@ -6,7 +6,8 @@
   "author": "",
   "license": "0BSD",
   "dependencies": {
+    "axios": "^0.21.1",
     "discord.js": "^12.5.3",
-    "node-fetch": "^2.6.1"
+    "tweetnacl": "^1.0.3"
   }
 }
