@@ -6,6 +6,8 @@ const Discord = require("discord.js");
 const PUBLIC_KEY =
   "ed1c4e1eb883faf4e47c3602de8943aef915cdc1e67ecc415815241d38f29a05";
 
+const APPLICATION_ID = "844757716344897548";
+
 const httpTrigger: AzureFunction = async function (
   context: Context,
   req: HttpRequest
@@ -40,9 +42,15 @@ const httpTrigger: AzureFunction = async function (
     };
   } else {
     // send back cookies!
-    // we need to send back a 200 immediately
+    // we need to send back a 200 immediately in case this is a slow start
     context.res = {
       status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: 5,
+      }),
     };
     const cookiesData = await axios
       .get(
@@ -50,24 +58,20 @@ const httpTrigger: AzureFunction = async function (
       )
       .then((response) => response.data);
 
-    context.res = {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        type: 4,
-        data: {
-          embeds: cookiesData.map(
-            (cookie: { name: string; description: string; image: any }) =>
-              new Discord.MessageEmbed()
-                .setTitle(cookie.name)
-                .setDescription(cookie.description)
-                .setThumbnail(cookie.image)
-          ),
-        },
-      }),
-    };
+    // update the response once we have the data
+    axios.patch(
+      `https://discord.com/api/v8/webhooks/${APPLICATION_ID}/${req.body.token}/messages/@original`,
+      {
+        content: "Here are the weekly specialty cookies!",
+        embeds: cookiesData.map(
+          (cookie: { name: string; description: string; image: string }) =>
+            new Discord.MessageEmbed()
+              .setTitle(cookie.name)
+              .setDescription(cookie.description)
+              .setThumbnail(cookie.image)
+        ),
+      }
+    );
   }
 };
 

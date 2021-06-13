@@ -17,8 +17,8 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/node": "^15.12.2",
-    "axios": "^0.21.1",
     "discord.js": "^12.5.3",
     "tweetnacl": "^1.0.3"
   }

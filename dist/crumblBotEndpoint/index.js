@@ -13,6 +13,7 @@ const nacl = require("tweetnacl");
 const axios = require("axios");
 const Discord = require("discord.js");
 const PUBLIC_KEY = "ed1c4e1eb883faf4e47c3602de8943aef915cdc1e67ecc415815241d38f29a05";
+const APPLICATION_ID = "844757716344897548";
 const httpTrigger = function (context, req) {
     return __awaiter(this, void 0, void 0, function* () {
         context.log(`CrumblBot woke up at: ${Date()}`);
@@ -39,28 +40,27 @@ const httpTrigger = function (context, req) {
         }
         else {
             // send back cookies!
-            // we need to send back a 200 immediately
-            context.res = {
-                status: 200,
-            };
-            const cookiesData = yield axios
-                .get("https://crumbl.azurewebsites.net/api/fetchcrumblspecials?code=Xvd37SKFCnS8KyfIDGfVOXa9SPDwJVb9Chp6UQX1ZN5ViAl0JLxYwA==")
-                .then((response) => response.data);
+            // we need to send back a 200 immediately in case this is a slow start
             context.res = {
                 status: 200,
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    type: 4,
-                    data: {
-                        embeds: cookiesData.map((cookie) => new Discord.MessageEmbed()
-                            .setTitle(cookie.name)
-                            .setDescription(cookie.description)
-                            .setThumbnail(cookie.image)),
-                    },
+                    type: 5,
                 }),
             };
+            const cookiesData = yield axios
+                .get("https://crumbl.azurewebsites.net/api/fetchcrumblspecials?code=Xvd37SKFCnS8KyfIDGfVOXa9SPDwJVb9Chp6UQX1ZN5ViAl0JLxYwA==")
+                .then((response) => response.data);
+            // update the response once we have the data
+            axios.patch(`https://discord.com/api/v8/webhooks/${APPLICATION_ID}/${req.body.token}/messages/@original`, {
+                content: "Here are the weekly specialty cookies!",
+                embeds: cookiesData.map((cookie) => new Discord.MessageEmbed()
+                    .setTitle(cookie.name)
+                    .setDescription(cookie.description)
+                    .setThumbnail(cookie.image)),
+            });
         }
     });
 };
