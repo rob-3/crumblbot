@@ -1,9 +1,12 @@
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 const fetch = require("node-fetch");
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  client.on("interaction", (interaction) => {
+    console.log(interaction);
+  });
 });
 
 const regex = /"buildId":"(.*?)"/;
@@ -28,7 +31,7 @@ client.on("message", async (message) => {
             .setTitle(cookie.name)
             .setDescription(cookie.description)
             .setThumbnail(cookie.image);
-          message.channel.send(embed);
+          message.channel.send({ embeds: [embed] });
         });
     }
   } catch (e) {
