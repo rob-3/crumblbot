@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/nodejs:latest
+FROM public.ecr.aws/lambda/nodejs:14
 
 WORKDIR ${LAMBDA_TASK_ROOT}
 
