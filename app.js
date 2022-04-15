@@ -1,4 +1,6 @@
 const axios = require("axios");
+const axiosRetry = require("axios-retry");
+axiosRetry(axios, { retries: 3 });
 const Discord = require("discord.js");
 
 const APPLICATION_ID = "844757716344897548";
